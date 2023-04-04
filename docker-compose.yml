@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  web:
+    container_name: movie-search
+    build:
+      context: ./
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production
+      APP_SETTINGS: "config.DevelopmentConfig"
+      DATABASE_URL: postgresql://movies_user:postgres@db:5432/movies
+      FLASK_RUN_PORT: 3000
+    volumes:
+      - ./app/:/app
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+volumes:
+  db:
+    driver: local
