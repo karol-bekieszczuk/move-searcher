@@ -11,10 +11,12 @@ services:
     environment:
       NODE_ENV: production
       APP_SETTINGS: "config.DevelopmentConfig"
-      DATABASE_URL: postgresql://movies_user:postgres@db:5432/movies
+      DATABASE_URL: /run/secrets/db_link
       FLASK_RUN_PORT: 3000
     volumes:
       - ./app/:/app
+    secrets:
+      - db_link
   db:
     image: postgres:14.1-alpine
     restart: always
@@ -26,6 +28,9 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+secrets:
+  db_link:
+    file: ./db/db_link.txt
 volumes:
   db:
     driver: local

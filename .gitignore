@@ -1,3 +1,4 @@
 app/venv/
 *.bak
 .idea/
+local/
