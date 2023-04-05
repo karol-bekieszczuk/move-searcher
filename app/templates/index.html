@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Movies</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block extend_head %}
+    <title>Search</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/search_ajax.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+{% block extend_body %}
     <h1>Movies</h1>
-    <ul>
-        {% for movie in movies %}
-        <li>{{ movie.title }} - {{ movie.director }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>asdasd
+    <form action="/search" method="get">
+        <label for="search-input">Enter title or director</label>
+        <input id="search-input" type="text" name="search-input">
+    </form>
+
+    <div id="search-results"></div>
+{% endblock %}
