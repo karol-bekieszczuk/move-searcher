@@ -1,18 +1,13 @@
 from flask import Flask, render_template, jsonify, request, url_for
 import os
 from sqlalchemy import or_, func
-
-
-
 from models import db, Movie
+
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-with open(os.environ['DATABASE_URL'], 'r') as f:
-    db_url = f.read().strip()
-
-app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db.init_app(app)
 
 
@@ -20,6 +15,7 @@ db.init_app(app)
 def index():
     movies = Movie.query.all()
     return render_template('index.html', movies=movies)
+
 
 @app.route('/search')
 def search():
@@ -29,6 +25,7 @@ def search():
                                  ).all()
     return jsonify([{'id': r.id, 'title': r.title, 'director': r.director} for r in results])
 
+
 @app.route('/<int:movie_id>')
 def details(movie_id):
     movie = Movie.query.get(movie_id)
@@ -36,4 +33,4 @@ def details(movie_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=os.environ['FLASK_RUN_PORT'])
+    app.run(debug=True, host='0.0.0.0', port=os.environ['FLASK_RUN_PORT'])
