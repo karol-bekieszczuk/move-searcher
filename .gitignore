@@ -3,3 +3,4 @@ __pycache__/
 *.bak
 .idea/
 local/
+db/db_link.txt
